@@ -1,0 +1,73 @@
+/* NFTMintingComponent.css */
+
+.nft-minting-container {
+    background-color: black;
+    color: gold;
+    padding: 20px;
+    border-radius: 8px;
+    /* Add more styling for positioning, shadows, etc. */
+  }
+  
+  .nft-minting-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid gold;
+    border-radius: 5px;
+    background-color: black;
+    color: gold;
+    /* Add more styling as needed */
+  }
+  
+  .mint-button {
+    padding: 10px 20px;
+    background-color: gold;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    /* Add more styling as needed */
+  }
+  /* NFTMintingComponent.css */
+
+/* ... previous styles ... */
+
+.file-input-section {
+    margin-bottom: 20px;
+    color: gold;
+  }
+  
+  .file-input-label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .file-input {
+    padding: 10px;
+    border: 1px solid gold;
+    border-radius: 5px;
+    background-color: black;
+    color: gold;
+    /* Additional styling for file input */
+  }
+  
+  /* Style other input fields and text areas similarly */
+  
+  .upload-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: gold;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    /* Additional styling for upload button */
+  }
+  
