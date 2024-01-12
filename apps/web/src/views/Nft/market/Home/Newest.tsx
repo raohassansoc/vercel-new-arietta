@@ -8,7 +8,8 @@ import { isAddress } from 'utils'
 import { CollectibleLinkCard } from '../components/CollectibleCard'
 import GridPlaceholder from '../components/GridPlaceholder'
 import { useContractRead } from 'wagmi';
-import ABI from "../Create/MarketPlaceContract.json";
+import ABI from "../Create/ERC721_1155_ABI.json";
+import NFTCard from './NFTCard'
 
 /**
  * Fetch latest NFTs data from SG+API and combine them
@@ -16,24 +17,46 @@ import ABI from "../Create/MarketPlaceContract.json";
  */
 const useNewestNfts = () => {
   const [newestNfts, setNewestNfts] = useState<NftToken[]>(null)
+  // const [getAllNFTs, setGetAllNFTs] = useState([]);
 
-  const NFTResult = useContractRead({
-    address: '0x59b5F1A58832CCE19644222a1a1d9a028f6Bc43B',
-    abi: ABI,
-    functionName: 'getAllListings',
-    onSuccess(data) {
-      // alert(data)
-    },
-    onError(error) {
-      console.log("my error for listing", error)
-    }
-  } as any)
+  // const NFTResult = useContractRead({
+  //   address: '0xE196B6f2F046e5cDd6F058b348016896D6eF910B',
+  //   abi: ABI,
+  //   functionName: 'getAllNFTs',
+  // } as any)
 
-  console.log("Get All NFT ===> ",NFTResult )
+  // useEffect(() => {
+  //   try {
+  //     const allNFTs = NFTResult.data;
+  //     setGetAllNFTs(allNFTs as any)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
 
-  useEffect(() => {
+  // }, [NFTResult])
 
-  }, [])
+  // useEffect(() => {
+  //   console.log("my all NFT ===> ", getAllNFTs)
+  // }, [getAllNFTs])
+
+
+  // useEffect(() => {
+  //   console.log("My NFTs ===> ", NFTResult.data[0][4])
+  //   const nftmetaData = NFTResult.data[0][4]
+  //   fetch(nftmetaData)
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Network response was not ok');
+  //       }
+  //       return response.json(); // or response.text() if the response is not in JSON format
+  //     })
+  //     .then(data => {
+  //       console.log("my nft META DAA", data); // Process the data
+  //     })
+  //     .catch(error => {
+  //       console.error('Fetch error:', error);
+  //     });
+  // }, [NFTResult])
 
   useEffect(() => {
     const fetchNewestNfts = async () => {
@@ -62,6 +85,28 @@ const useNewestNfts = () => {
 const Newest: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const nfts = useNewestNfts()
+  const [getAllNFTs, setGetAllNFTs] = useState([]);
+
+  const NFTResult = useContractRead({
+    address: '0xE196B6f2F046e5cDd6F058b348016896D6eF910B',
+    abi: ABI,
+    functionName: 'getAllNFTs',
+  } as any)
+
+  useEffect(() => {
+    try {
+      const allNFTs = NFTResult.data;
+      setGetAllNFTs(allNFTs as any)
+    } catch (error) {
+      console.log(error)
+    }
+
+  }, [NFTResult])
+
+  useEffect(() => {
+    console.log("my all NFT ===> ", getAllNFTs)
+  }, [getAllNFTs])
+
 
   return (
     <>
@@ -83,7 +128,25 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
           gridColumnGap="16px"
           gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
         >
-          {nfts.map((nft) => {
+          {
+            getAllNFTs.map((nft, ind) => {
+
+              return (
+                <div>
+                  {/* {nft.tokenId.toNumber()} */}
+                  <NFTCard nft={nft} />
+                  {/* <CollectibleLinkCard
+                    data-test="newest-nft-card"
+                    key={nft.owner + nft.tokenId.toNumber()}
+                    nft={nft}
+                    currentAskPrice={nft.price.toNumber()}
+                  /> */}
+                </div>
+              )
+            })
+          }
+          {/* {nfts.map((nft) => {
+            console.log("mt nft ======>", nft)
             const isPBCollection = isAddress(nft.collectionAddress) === pancakeBunniesAddress
             const currentAskPrice =
               !isPBCollection && nft.marketData?.isTradable ? parseFloat(nft.marketData?.currentAskPrice) : undefined
@@ -95,7 +158,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
                 currentAskPrice={currentAskPrice}
               />
             )
-          })}
+          })} */}
         </Grid>
       ) : (
         <GridPlaceholder numItems={8} />

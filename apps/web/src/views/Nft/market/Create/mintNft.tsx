@@ -1,11 +1,12 @@
 import React, { useState, ChangeEvent, FormEvent, CSSProperties, useEffect } from 'react';
 import { Web3Storage } from "web3.storage";
 import ABI from "./ERC721_1155_ABI.json"
-import { useContractWrite } from 'wagmi';
+import { useContractWrite, useProvider } from 'wagmi';
 
 const NFTMintingComponent: React.FC = () => {
+  const provider = useProvider();
   const [callContractFn, setCallContractFn] = useState(false);
-  const [tokenURI, setTokenURI] = useState("")
+  const [tokenURI, setTokenURI] = useState("https://bafybeihjaf4grevkk7fxgpeu2w532q7f2j7tyfqirdebm3537urrwsfgqq.ipfs.w3s.link/data.json")
   const apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDMzNjgwREU5MDNBRUIxMjc2NEZGRDJhOWNDRUFDNTNFYjdkMzVkQkIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2OTQ1MzA5NTA3NzQsIm5hbWUiOiJidWlsZGVyIn0.4B_Mvq1WvDruzbxzU37gHS4cfKG6DVsp4dDkdo495eA";
   const client = new Web3Storage({ token: apiKey });
 
@@ -26,17 +27,21 @@ const NFTMintingComponent: React.FC = () => {
     }));
   };
 
-  const { write } = useContractWrite({
-    address: '0x4E0022eaAfB21f8050Bfa074673198b5261b6E3b',
+  const { write, isLoading } = useContractWrite({
+    address: '0xE196B6f2F046e5cDd6F058b348016896D6eF910B',
     abi: ABI,
-    functionName: 'createERC721Token',
+    functionName: 'createNFT',
     args: [
-      nftDetails.itemName,
-      nftDetails.externalLink,
       tokenURI,
     ],
-    onSuccess(data) {
-      alert(data)
+    async onSuccess(data) {
+      console.log("NFT created of ===> ", data)
+      try {
+        const receipt = await provider.waitForTransaction(data.hash);
+        console.log("My receipt ===> ", receipt)
+      } catch (error) {
+        console.log(error)
+      }
     },
     onError(error) {
       console.log(error)
@@ -112,7 +117,9 @@ const NFTMintingComponent: React.FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('NFT Details:', nftDetails);
-    UploadMetaData()
+    // UploadMetaData()
+    write({
+    } as any)
   };
 
   const styles: { [key: string]: CSSProperties } = {
@@ -183,8 +190,8 @@ const NFTMintingComponent: React.FC = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Image, Video, Audio, or 3D Model</h2>
-      <h6 style={{ marginBottom: '50px' }}>File types supported: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF. Max size: 100 MB</h6>
+      <h2 style={styles.title}>Image</h2>
+      <h6 style={{ marginBottom: '50px' }}>File types supported: JPG, PNG. Max size: 100 MB</h6>
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: '20px' }}>
           <label htmlFor="fileInput" style={styles.fileInput}>

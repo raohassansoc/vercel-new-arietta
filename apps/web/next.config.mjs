@@ -59,7 +59,7 @@ const config = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'static-nft.pancakeswap.com',
+        hostname: 'ipfs.io',
       },
     ],
   },

@@ -74,7 +74,7 @@ const Home = () => {
         <StyledHeaderInner>
           <div>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('NFT Marketplace')}
+              {t('NFT Marketplace Rao')}
             </Heading>
             <Heading scale="lg" color="text">
               {t('Buy and Sell NFTs on Arietta Smart Chain')}
