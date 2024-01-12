@@ -1,7 +1,8 @@
-import React, { CSSProperties } from 'react';
+'use strict'
+import React, { CSSProperties, useEffect, useState } from 'react';
 
 import ABI from "./Factory_ABI.json";
-import { useContractWrite } from 'wagmi'
+import { useContractWrite, useAccount, useProvider } from 'wagmi'
 
 const styles: { [key: string]: CSSProperties } = {
     container: {
@@ -66,10 +67,15 @@ const styles: { [key: string]: CSSProperties } = {
 }
 
 
+
 const StandardSmartContract = ({ tokendata }) => {
-    const { write } = useContractWrite(
+    const [loading, setLoading] = useState(false);
+    const [TokenAdrs, setTokenAdrs] = useState(null);
+    const { address } = useAccount()
+    const provider = useProvider();
+    const { write, data, isSuccess, isLoading } = useContractWrite(
         {
-            address: '0xEe23E4257e5a1698e6868079EFd4B03d99a77B0E',
+            address: '0xF2fDff7D5772648E89662e19F5B9CffeC650CaA1',
             abi: ABI,
             functionName: 'createStandardToken',
             args: [
@@ -77,9 +83,20 @@ const StandardSmartContract = ({ tokendata }) => {
                 tokendata.symbol,
                 tokendata.decimals,
                 tokendata.totalSupply,
+                address
             ],
-            onSuccess(data) {
-                alert(data)
+            async onSuccess(data) {
+                setLoading(true)
+                try {
+                    console.log("data ===> ", data)
+                    const tx = await provider.getTransaction(data.hash);
+                    const receipt = await provider.waitForTransaction(data.hash);
+                    setTokenAdrs(receipt.logs[1].topics[1].replace('000000000000000000000000', ''))
+                    setLoading(false)
+
+                } catch (error) {
+                    setLoading(false)
+                }
             },
             onError(error) {
                 console.log(error)
@@ -87,8 +104,12 @@ const StandardSmartContract = ({ tokendata }) => {
         } as any
     )
 
+    // const recept = async (hash) => {
+
+    // }
 
     const createStandardTokens = async () => {
+        setTokenAdrs(null)
         try {
             write({
             } as any)
@@ -97,10 +118,17 @@ const StandardSmartContract = ({ tokendata }) => {
             console.error('Error creating liquidity token:', error);
         }
     };
-
+    useEffect(() => { setLoading(isLoading) }, [isLoading])
     return (
         <>
-            <button onClick={createStandardTokens} style={styles.submitButton}>Standard Token</button>
+            {TokenAdrs ? <div style={{ paddingTop: 15, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <p >Token Address: {TokenAdrs}</p>
+                <a href={`https://tnexplorer.ariettachain.tech/address/${TokenAdrs}`} target='_blank' style={{}}>View On BlockScan</a>
+            </div> : ''}
+            {loading ?
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                    <a style={styles.submitButton}>Loading...</a></div> :
+                <button onClick={createStandardTokens} style={styles.submitButton}>Standard Token</button>}
         </>
     )
 }

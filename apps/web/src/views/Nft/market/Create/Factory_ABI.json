@@ -147,6 +147,11 @@
                 "internalType": "uint256",
                 "name": "totalSupply",
                 "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "tokenOwner",
+                "type": "address"
             }
         ],
         "name": "createStandardToken",
@@ -189,6 +194,19 @@
             }
         ],
         "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "tokenAddress",
+                "type": "address"
+            }
+        ],
+        "name": "withdrawERC20",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
