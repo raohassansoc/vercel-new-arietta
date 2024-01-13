@@ -132,7 +132,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
           style={{ marginBottom: "25px" }}
         >
           {
-            getAllNFTs.map((nft, ind) => {
+            getAllNFTs?.map((nft, ind) => {
 
               return (
                 <div>

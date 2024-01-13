@@ -378,7 +378,7 @@ const Collectible = () => {
               //   })}
               // </Grid>
               <>
-                <h1 style={{ paddingBottom: "20px", color: "#fcb016", fontSize: "22px" }}>My Non listed NFTs</h1>
+                <h1 style={{ paddingBottom: "20px", color: "#fcb016", fontSize: "22px" }}>Minted NFTs</h1>
 
                 <Grid
                   gridGap="16px"
