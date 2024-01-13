@@ -38,7 +38,7 @@ const BuyNFTModal = ({ isOpen, onClose }) => {
     }
 
     // const { write, isLoading } = useContractWrite({
-    //     address: '0xE196B6f2F046e5cDd6F058b348016896D6eF910B',
+    //     address: '0x1b61EEb2529F89F764959F329102Bd3604B9a8Bf',
     //     abi: "",
     //     functionName: 'buyNFT',
     //     args: [

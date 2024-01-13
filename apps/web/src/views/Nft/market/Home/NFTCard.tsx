@@ -1,10 +1,12 @@
 import React, { useState, useEffect, CSSProperties } from 'react';
 import Image from 'next/image';
 import NFTDetailModal from './NFTDetailModal';
-import { useContractWrite, useProvider } from 'wagmi';
+import { useContractWrite, useProvider, useContract, useSigner, usePrepareContractWrite, useAccount } from 'wagmi';
+
 import ABI from "../Create/ERC721_1155_ABI.json"
 
 const NFTCard = ({ nft }) => {
+  const { address } = useAccount();
   const [myNFT, setMyNFT] = useState(null)
   const [ISopen, setISopen] = useState(false)
   const [ISopenBuy, setISopenBuy] = useState(false)
@@ -12,30 +14,63 @@ const NFTCard = ({ nft }) => {
   // Buy NFT State
   const [tokenId, setTokenID] = useState("");
   const [tokenPrice, setTokenPrice] = useState("");
+  const [ethConvertVal, setEthConvertVal] = useState(0)
+
+  const [tdPrice, setTdPrice] = useState(0);
+  const [tDId, setSetTdId] = useState(0)
+
+  useEffect(() => {
+    const convert = BigInt(Number(nft?.price?._hex))
+    const ether = Number(convert) / 10 ** 18
+    setEthConvertVal(ether)
+  }, [nft])
+
+  useEffect(() => {
+    console.log("Mt data ===> ", Number(nft?.price?._hex))
+    console.log("Mt data token ===> ", nft?.tokenId?.toNumber())
+
+  }, [myNFT])
 
   const provider = useProvider();
+  // const { data: signer } = useSigner();
 
-  const { write, isLoading } = useContractWrite({
-    address: '0xE196B6f2F046e5cDd6F058b348016896D6eF910B',
+  // const contract = useContract({
+  //   addressOrName: '0x1b61EEb2529F89F764959F329102Bd3604B9a8Bf',
+  //   contractInterface: ABI,
+  //   signerOrProvider: signer || provider,
+  // } as any);
+
+  const { config } = usePrepareContractWrite({
+    address: '0x1b61EEb2529F89F764959F329102Bd3604B9a8Bf',
     abi: ABI,
     functionName: 'buyNFT',
-    args: [
-      tokenId,
-      tokenPrice
-    ],
-    async onSuccess(data) {
-      console.log("NFT created of ===> ", data)
-      try {
-        const receipt = await provider.waitForTransaction(data.hash);
-        console.log("My receipt ===> ", receipt)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    onError(error) {
-      console.log(error)
-    }
-  } as any)
+    args: [tDId, tdPrice],
+    account: address,
+    value: tdPrice
+    // overrides: {
+    //   value: tdPrice,
+    // },
+  } as any);
+
+  const { write, isLoading } = useContractWrite(config);
+
+
+  const buy = () => {
+    let value = BigInt(Number(nft?.price?._hex))
+    let id = nft?.tokenId?.toNumber()
+
+    console.log(value)
+    console.log(id)
+
+    setTdPrice(Number(value))
+    setSetTdId(id)
+
+    write({} as any);
+
+    // if (write) {
+    //   write();
+    // }
+  }
 
 
   useEffect(() => {
@@ -58,13 +93,11 @@ const NFTCard = ({ nft }) => {
 
   }, [nft])
 
-  useEffect(() => {
-    console.log("New Data ===> ", myNFT?.image)
-  }, [myNFT])
 
   const styles: { [key: string]: CSSProperties } = {
     cardStyle: {
       width: '250px',
+      height: "321px",
       borderRadius: '20px',
       padding: '20px',
       backgroundColor: '#27262c', // Set the background color to match the card
@@ -153,8 +186,10 @@ const NFTCard = ({ nft }) => {
           <div style={styles.modalStyle}>
             <input style={{ marginBottom: "10px" }} type="text" placeholder='Token Id' onChange={(e) => setTokenID(e.target.value)} /> <br />
             <input style={{ marginBottom: "10px" }} type="text" placeholder='Price' onChange={(e) => setTokenPrice(e.target.value)} /> <br />
-            <button onClick={() => write({
-            } as any)}>Buy</button>
+            <button onClick={() => {
+              // buy()
+            }
+            }>Buy</button>
             {
               isLoading ? <p>Loading...</p> : " "
             }
@@ -178,7 +213,8 @@ const NFTCard = ({ nft }) => {
       </div>
       {
         nft?.isListed ? <div style={styles.priceStyle}>
-          <p>price: {nft?.price?.toNumber()}</p> <button onClick={() => setISopenBuy(true)} style={styles.btnWrapper}>Buy</button>
+          <p>price: {ethConvertVal} ASC</p>
+          <button onClick={() => buy()} style={styles.btnWrapper}>Buy Now</button>
         </div> : ""
       }
 

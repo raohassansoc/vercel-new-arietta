@@ -74,7 +74,7 @@ const Home = () => {
         <StyledHeaderInner>
           <div>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('NFT Marketplace Rao')}
+              {t('NFT Marketplace')}
             </Heading>
             <Heading scale="lg" color="text">
               {t('Buy and Sell NFTs on Arietta Smart Chain')}
@@ -85,11 +85,11 @@ const Home = () => {
             <Button style={{ marginRight: '5px' }} as={NextLinkFromReactRouter} to={`/nfts/createnft`} mt="32px">
               Create NFT
             </Button>
-            {account && (
+            {/* {account && (
               <Button as={NextLinkFromReactRouter} to={`/profile/${account.toLowerCase()}`} mt="32px">
                 {t('Manage/Sell')}
               </Button>
-            )}
+            )} */}
           </div>
           <SearchBar />
         </StyledHeaderInner>
@@ -119,7 +119,7 @@ const Home = () => {
           <Newest />
         </PageSection>
       )} */}
-      <div style={{margin: "0 65px"}}>
+      <div style={{ margin: "0 65px" }}>
         <Newest />
       </div>
       <Gradient p="64px 0">

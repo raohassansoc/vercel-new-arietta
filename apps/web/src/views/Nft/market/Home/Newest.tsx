@@ -20,7 +20,7 @@ const useNewestNfts = () => {
   // const [getAllNFTs, setGetAllNFTs] = useState([]);
 
   // const NFTResult = useContractRead({
-  //   address: '0xE196B6f2F046e5cDd6F058b348016896D6eF910B',
+  //   address: '0x1b61EEb2529F89F764959F329102Bd3604B9a8Bf',
   //   abi: ABI,
   //   functionName: 'getAllNFTs',
   // } as any)
@@ -88,7 +88,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
   const [getAllNFTs, setGetAllNFTs] = useState([]);
 
   const NFTResult = useContractRead({
-    address: '0xE196B6f2F046e5cDd6F058b348016896D6eF910B',
+    address: '0x1b61EEb2529F89F764959F329102Bd3604B9a8Bf',
     abi: ABI,
     functionName: 'getAllNFTs',
   } as any)
@@ -96,6 +96,8 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
   useEffect(() => {
     try {
       const allNFTs = NFTResult.data;
+      // const listNFT = allNFTs.map((nft,ind) => {})
+      // console.log("only listed ===> nft ", allNFTs)
       setGetAllNFTs(allNFTs as any)
     } catch (error) {
       console.log(error)
@@ -112,7 +114,7 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
     <>
       <Flex justifyContent="space-between" alignItems="center" mb="26px">
         <Heading data-test="nfts-newest">{t('Newest Arrivals')}</Heading>
-        <Button
+        {/* <Button
           as={NextLinkFromReactRouter}
           to={`${nftsBaseUrl}/activity/`}
           variant="secondary"
@@ -120,13 +122,14 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
           endIcon={<ChevronRightIcon color="primary" />}
         >
           {t('View All')}
-        </Button>
+        </Button> */}
       </Flex>
       {nfts ? (
         <Grid
           gridRowGap="24px"
           gridColumnGap="16px"
           gridTemplateColumns={['1fr', 'repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']}
+          style={{ marginBottom: "25px" }}
         >
           {
             getAllNFTs.map((nft, ind) => {
@@ -134,7 +137,8 @@ const Newest: React.FC<React.PropsWithChildren> = () => {
               return (
                 <div>
                   {/* {nft.tokenId.toNumber()} */}
-                  <NFTCard nft={nft} />
+                  {nft.isListed ? <NFTCard nft={nft} /> : ""}
+
                   {/* <CollectibleLinkCard
                     data-test="newest-nft-card"
                     key={nft.owner + nft.tokenId.toNumber()}

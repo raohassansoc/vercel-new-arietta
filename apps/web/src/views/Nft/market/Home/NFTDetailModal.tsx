@@ -5,6 +5,8 @@ const NFTDetailModal = ({ isOpen, onClose, item }) => {
         return null;
     }
 
+
+
     const styles: { [key: string]: CSSProperties } = {
         modalStyle: {
             display: 'flex',
@@ -74,7 +76,7 @@ const NFTDetailModal = ({ isOpen, onClose, item }) => {
                     <h2 style={{ color: "black", marginBottom: "10px", textAlign: "left" }}>Name: {item?.name}</h2>
                     <p style={{ color: "black", marginBottom: "10px", textAlign: "left" }}>Symbol: {item?.externalLink}</p>
                     {/* <p>{item.price}</p> */}
-                    <p style={{ color: "black", marginBottom: "10px", textAlign: "left" }}>{item.description}</p>
+                    <p style={{ color: "black", marginBottom: "10px", textAlign: "left" }}>Description: {item.description}</p>
                     {/* <button style={styles.buttonStyle} onClick={() => console.log('Sell action')}>Sell</button> */}
                 </div>
             </div>
